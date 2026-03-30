@@ -1,0 +1,19 @@
+{
+  "name": "parkware",
+  "version": "1.0.0",
+  "description": "ParkWare - Real-time parking availability simulator for Galway City",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "parking",
+    "galway",
+    "maps",
+    "real-time"
+  ],
+  "author": "Dara Moylan",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
