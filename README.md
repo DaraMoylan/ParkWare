@@ -25,6 +25,12 @@ parkware/
 └── README.md    — Project outline
 ```
 
+## Screenshots
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
 ## How to run
 
 1. Clone the repo
