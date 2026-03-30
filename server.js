@@ -1,22 +1,8 @@
-/*
- * server.js — ParkWare Development Server
- * 
- * A simple static file server using only Node.js built-in modules.
- * No Express, no dependencies — just http, fs, and path.
- * 
- * All it does is serve files from this directory. When you visit
- * the root URL ("/"), it serves index.html. For anything else,
- * it tries to find the file and serve it with the right Content-Type.
- * 
- * Usage:
- *   node server.js
- *   then open http://localhost:3000 in your browser
- */
-
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// define port and host
 const PORT = 3000;
 const HOST = '0.0.0.0';
 
