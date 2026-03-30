@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ParkWare - Galway Parking Availability</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- 
+        HEADER
+        Sits at the very top of the screen, on top of the map.
+        Just branding — the app name and a description.
+    -->
+    <div class="header">
+        <h1>🚗 ParkWare</h1>
+        <div class="subtitle">Real-time parking availability in Galway City</div>
+    </div>
+
+    <!-- 
+        STATS BAR
+        A little summary strip below the header showing 3 numbers:
+        - How many parking locations we're tracking
+        - Total free spaces across all of them
+        - The average availability as a percentage
+
+        These get updated dynamically by updateOverallStats() in app.js.
+        The IDs are how we grab them from JavaScript.
+    -->
+    <div class="stats-bar">
+        <div class="stat-mini">
+            <div class="stat-mini-value" id="totalLots">30</div>
+            <div class="stat-mini-label">Locations</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-value" id="totalAvailable">--</div>
+            <div class="stat-mini-label">Free Spaces</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-value" id="avgAvailability">--%</div>
+            <div class="stat-mini-label">Available</div>
+        </div>
+    </div>
+
+    <!-- 
+        THE MAP
+        This empty div is where Google Maps renders itself.
+        The initMap() function (in app.js) targets this by ID.
+        It takes up the full viewport (100vh in CSS).
+    -->
+    <div id="map"></div>
+
+    <!-- 
+        REFRESH BUTTON
+        Floating button in the top-right corner.
+        When clicked it calls refreshData() which simulates
+        new parking data and redraws all the markers.
+        The SVG inside is just a "circular arrows" icon drawn inline.
+    -->
+    <button class="refresh-btn" onclick="refreshData()" title="Refresh parking data">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+        </svg>
+    </button>
+
+    <!-- 
+        ^ <svg> wrapper creates a 24x24 pixel canvas and the viewbox defines the coordinates system
+            <path> element is what does the drawing, quite frankly i don't understand the 
+            d= commands inside the element I just copied a circular refresh icon
+    -->
+
+    <!-- 
+        LEGEND
+        Sits in the bottom-left corner. Explains what the marker colours mean.
+        This is entirely static — no JS touches it.
+    -->
+    <div class="legend">
+        <div class="legend-title">Availability</div>
+        <div class="legend-item">
+            <div class="legend-color available"></div>
+            <span>Available (&gt;50%)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color moderate"></div>
+            <span>Moderate (20-50%)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color full"></div>
+            <span>Full (&lt;20%)</span>
+        </div>
+    </div>
+
+    <!-- 
+        PARKING INFO PANEL
+        This is the slide-up detail card that appears when you tap a marker.
+        Hidden by default (display: none in CSS). When a marker is clicked,
+        showParkingInfo() adds the "active" class which makes it visible 
+        and triggers the slide-up animation.
+        
+        All the spans with IDs (lotName, lotType, availableSpaces, etc.)
+        get filled in dynamically by showParkingInfo() in app.js.
+    -->
+    <div class="parking-info" id="parkingInfo">
+        <div class="close-btn" onclick="closeParkingInfo()">×</div>
+        
+        <h2>
+            <span id="lotName"></span>
+            <span class="parking-type" id="lotType"></span>
+        </h2>
+        
+        <!-- Progress bar showing how full the car park is -->
+        <div class="availability-bar">
+            <div class="availability-fill" id="availabilityFill"></div>
+        </div>
+        
+        <!-- Three key numbers side by side -->
+        <div class="parking-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="availableSpaces">--</div>
+                <div class="stat-label">Available</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalSpaces">--</div>
+                <div class="stat-label">Total Spaces</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="percentFull">--%</div>
+                <div class="stat-label">Full</div>
+            </div>
+        </div>
+        
+        <!-- Pricing and hours — injected via innerHTML in showParkingInfo() -->
+        <div class="additional-info" id="additionalInfo"></div>
+        
+        <div class="last-updated-text">
+            Last updated: <span id="lastUpdated">Just now</span>
+        </div>
+    </div>
+
+    <!-- 
+        SCRIPTS
+        
+        We load our own JS first (it defines initMap, the parking data, etc.)
+        then load the Google Maps API with "async defer" so it doesn't block
+        the page from rendering. 
+        
+        The "&callback=initMap" part tells the Maps API to call our initMap() 
+        function once it's finished loading — that's what kicks everything off.
+
+        NOTE: The API key below should be replaced with your own.
+        You can get one at https://console.cloud.google.com/
+        If you're putting this on GitHub, use an environment variable instead
+        of hardcoding the key, or restrict it in the Google Cloud console.
+    -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFrNMPlTOWQGv1n4rFacR0r4RhWbmpmBQ&callback=initMap">
+    </script>
+
+</body>
+</html>
